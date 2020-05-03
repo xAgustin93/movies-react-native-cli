@@ -46,6 +46,7 @@ end
 
 target 'movies' do
   # Pods for movies
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
