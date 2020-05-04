@@ -2,9 +2,13 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, ScrollView, Image} from 'react-native';
 import {Text, Title, IconButton} from 'react-native-paper';
 import {map} from 'lodash';
+import {Rating} from 'react-native-ratings';
 import {getMovieById} from '../api/movies';
 import {BASE_PATH_IMG} from '../utils/constants';
 import ModalVideo from '../components/ModalVideo';
+import usePreferences from '../hooks/usePreferences';
+import starDark from '../assets/png/starDark.png';
+import starLight from '../assets/png/starLight.png';
 
 export default function Movie(props) {
   const {route} = props;
@@ -25,36 +29,106 @@ export default function Movie(props) {
   return (
     <>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Image
-          style={styles.poster}
-          source={{uri: `${BASE_PATH_IMG}/w500${movie.poster_path}`}}
+        <MovieImage posterPath={movie.poster_path} />
+        <MovieTrailer setShowVideo={setShowVideo} />
+        <MovieTitle movie={movie} />
+        <MovieRating
+          voteCount={movie.vote_count}
+          voteAverage={movie.vote_average}
         />
-        <View style={styles.viewPlay}>
-          <IconButton
-            icon="play"
-            color="#000"
-            size={30}
-            style={styles.play}
-            onPress={() => setShowVideo(true)}
-          />
-        </View>
-        <View style={styles.viewInfo}>
-          <Title>{movie.title}</Title>
-          <View style={styles.viewGenres}>
-            {map(movie.genres, (genres) => (
-              <Text key={genres.id} style={styles.genre}>
-                {genres.name}
-              </Text>
-            ))}
-          </View>
-        </View>
+        <Text style={styles.overview}>{movie.overview}</Text>
+        <Text style={styles.overview}>
+          Fecha de lanzamiento: {movie.release_date}
+        </Text>
       </ScrollView>
       <ModalVideo show={showVideo} setShow={setShowVideo} idMovie={id} />
     </>
   );
 }
 
+function MovieImage(props) {
+  const {posterPath} = props;
+  return (
+    <View style={styles.viewPoster}>
+      <Image
+        style={styles.poster}
+        source={{uri: `${BASE_PATH_IMG}/w500${posterPath}`}}
+      />
+    </View>
+  );
+}
+
+function MovieTrailer(props) {
+  const {setShowVideo} = props;
+
+  return (
+    <View style={styles.viewPlay}>
+      <IconButton
+        icon="play"
+        color="#000"
+        size={30}
+        style={styles.play}
+        onPress={() => setShowVideo(true)}
+      />
+    </View>
+  );
+}
+
+function MovieTitle(props) {
+  const {movie} = props;
+
+  return (
+    <View style={styles.viewInfo}>
+      <Title>{movie.title}</Title>
+      <View style={styles.viewGenres}>
+        {map(movie.genres, (genres) => (
+          <Text key={genres.id} style={styles.genre}>
+            {genres.name}
+          </Text>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function MovieRating(props) {
+  const {voteCount, voteAverage} = props;
+  const media = voteAverage / 2;
+  const {theme} = usePreferences();
+
+  return (
+    <View style={styles.viewRating}>
+      <Rating
+        type="custom"
+        ratingImage={theme === 'dark' ? starDark : starLight}
+        ratingColor="#ffc205"
+        ratingBackgroundColor={theme === 'dark' ? '#192734' : '#f0f0f0'}
+        startingValue={media}
+        imageSize={20}
+        style={{marginRight: 15}}
+      />
+      <Text style={{fontSize: 16, marginRight: 5}}>{media}</Text>
+      <Text style={{fontSize: 12, color: '#8697a5'}}>({voteCount} votos)</Text>
+    </View>
+  );
+}
+
+function MovieOverview(props) {
+  const {overview} = props;
+
+  return <Text>overview</Text>;
+}
+
 const styles = StyleSheet.create({
+  viewPoster: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+  },
   poster: {
     width: '100%',
     height: 500,
@@ -81,6 +155,18 @@ const styles = StyleSheet.create({
   },
   genre: {
     marginRight: 10,
+    color: '#8697a5',
+  },
+  viewRating: {
+    marginHorizontal: 30,
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  overview: {
+    marginHorizontal: 30,
+    marginTop: 20,
+    textAlign: 'justify',
     color: '#8697a5',
   },
 });
