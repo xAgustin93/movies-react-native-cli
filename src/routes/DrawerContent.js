@@ -32,11 +32,6 @@ export default function DrawerContent(props) {
           active={active === 'news'}
           onPress={() => onChangeScreen('news')}
         />
-        <Drawer.Item
-          label="Buscador"
-          active={active === 'search'}
-          onPress={() => onChangeScreen('search')}
-        />
       </Drawer.Section>
       <Drawer.Section title="Opciones">
         <TouchableRipple>
