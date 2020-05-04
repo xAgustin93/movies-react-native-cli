@@ -11,7 +11,8 @@ export default function Movie(props) {
   const {id} = route.params;
   const [movie, setMovie] = useState(null);
   const [showVideo, setShowVideo] = useState(false);
-  // console.log(movie);
+
+  console.log(movie);
 
   useEffect(() => {
     getMovieById(id).then((response) => {
@@ -22,32 +23,34 @@ export default function Movie(props) {
   if (!movie) return null;
 
   return (
-    <ScrollView>
-      <Image
-        style={styles.poster}
-        source={{uri: `${BASE_PATH_IMG}/w500${movie.poster_path}`}}
-      />
-      <View style={styles.viewPlay}>
-        <IconButton
-          icon="play"
-          color="#000"
-          size={30}
-          style={styles.play}
-          onPress={() => setShowVideo(true)}
+    <>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Image
+          style={styles.poster}
+          source={{uri: `${BASE_PATH_IMG}/w500${movie.poster_path}`}}
         />
-      </View>
-      <View style={styles.viewInfo}>
-        <Title>{movie.title}</Title>
-        <View style={styles.viewGenres}>
-          {map(movie.genres, (genres) => (
-            <Text key={genres.id} style={styles.genre}>
-              {genres.name}
-            </Text>
-          ))}
+        <View style={styles.viewPlay}>
+          <IconButton
+            icon="play"
+            color="#000"
+            size={30}
+            style={styles.play}
+            onPress={() => setShowVideo(true)}
+          />
         </View>
-      </View>
-      {/* <ModalVideo show={showVideo} setShow={setShowVideo} idMovie={id} /> */}
-    </ScrollView>
+        <View style={styles.viewInfo}>
+          <Title>{movie.title}</Title>
+          <View style={styles.viewGenres}>
+            {map(movie.genres, (genres) => (
+              <Text key={genres.id} style={styles.genre}>
+                {genres.name}
+              </Text>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+      <ModalVideo show={showVideo} setShow={setShowVideo} idMovie={id} />
+    </>
   );
 }
 

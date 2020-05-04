@@ -40,7 +40,7 @@ export default function Home(props) {
   };
 
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       {newMovies && (
         <View style={styles.news}>
           <Title style={styles.newsTitle}>Nuevas películas</Title>
