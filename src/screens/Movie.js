@@ -16,8 +16,6 @@ export default function Movie(props) {
   const [movie, setMovie] = useState(null);
   const [showVideo, setShowVideo] = useState(false);
 
-  console.log(movie);
-
   useEffect(() => {
     getMovieById(id).then((response) => {
       setMovie(response);
