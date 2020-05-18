@@ -1,37 +1,27 @@
 import React from 'react';
-import {IconButton} from 'react-native-paper';
-import {createStackNavigator} from '@react-navigation/stack';
-import usePreferences from '../hooks/usePreferences';
+import { IconButton } from 'react-native-paper';
+import { createStackNavigator } from '@react-navigation/stack';
 import Home from '../screens/Home';
 import Movie from '../screens/Movie';
-import Popular from '../screens/Popular';
 import News from '../screens/News';
+import Popular from '../screens/Popular';
 import Search from '../screens/Search';
 
 const Stack = createStackNavigator();
 
 export default function StackNavigation(props) {
-  const {navigation} = props;
-  const {theme} = usePreferences();
+  const { navigation } = props;
 
   const buttonLeft = (screen) => {
     switch (screen) {
-      case 'movie':
       case 'search':
+      case 'movie':
         return (
-          <IconButton
-            icon="arrow-left"
-            color={theme === 'dark' ? '#fff' : '#000'}
-            onPress={() => navigation.goBack()}
-          />
+          <IconButton icon="arrow-left" onPress={() => navigation.goBack()} />
         );
       default:
         return (
-          <IconButton
-            icon="menu"
-            color={theme === 'dark' ? '#fff' : '#000'}
-            onPress={() => navigation.toggleDrawer()}
-          />
+          <IconButton icon="menu" onPress={() => navigation.openDrawer()} />
         );
     }
   };
@@ -40,7 +30,6 @@ export default function StackNavigation(props) {
     return (
       <IconButton
         icon="magnify"
-        color={theme === 'dark' ? '#fff' : '#000'}
         onPress={() => navigation.navigate('search')}
       />
     );
@@ -49,11 +38,11 @@ export default function StackNavigation(props) {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="homee"
+        name="home"
         component={Home}
         options={{
-          title: 'Home',
-          headerLeft: () => buttonLeft(),
+          title: 'TheMovieApp',
+          headerLeft: () => buttonLeft('home'),
           headerRight: () => buttonRight(),
         }}
       />
@@ -68,20 +57,20 @@ export default function StackNavigation(props) {
         }}
       />
       <Stack.Screen
-        name="popular"
-        component={Popular}
-        options={{
-          title: 'Películas Populares',
-          headerLeft: () => buttonLeft(),
-          headerRight: () => buttonRight(),
-        }}
-      />
-      <Stack.Screen
         name="news"
         component={News}
         options={{
           title: 'Nuevas Películas',
-          headerLeft: () => buttonLeft(),
+          headerLeft: () => buttonLeft('news'),
+          headerRight: () => buttonRight(),
+        }}
+      />
+      <Stack.Screen
+        name="popular"
+        component={Popular}
+        options={{
+          title: 'Películas Populares',
+          headerLeft: () => buttonLeft('popular'),
           headerRight: () => buttonRight(),
         }}
       />
@@ -92,7 +81,6 @@ export default function StackNavigation(props) {
           title: '',
           headerTransparent: true,
           headerLeft: () => buttonLeft('search'),
-          headerRight: () => buttonRight(),
         }}
       />
     </Stack.Navigator>

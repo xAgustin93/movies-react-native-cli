@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, ScrollView} from 'react-native';
-import {Text, Title} from 'react-native-paper';
-import {map} from 'lodash';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, ScrollView, Text } from 'react-native';
+import { Title } from 'react-native-paper';
+import { map } from 'lodash';
 import CarouselVertical from '../components/CarouselVertical';
 import CarouselMulti from '../components/CarouselMulti';
 import {
@@ -11,11 +11,11 @@ import {
 } from '../api/movies';
 
 export default function Home(props) {
-  const {navigation} = props;
+  const { navigation } = props;
   const [newMovies, setNewMovies] = useState(null);
-  const [genreMovies, setGenreMovies] = useState(null);
   const [genreList, setGenreList] = useState([]);
   const [genreSelected, setGenreSelected] = useState(28);
+  const [genreMovies, setGenreMovies] = useState(null);
 
   useEffect(() => {
     getNewsMoviesApi().then((response) => {
@@ -52,14 +52,14 @@ export default function Home(props) {
         <Title style={styles.genresTitle}>Películas por genero</Title>
         <ScrollView
           horizontal
-          style={styles.genreList}
-          showsHorizontalScrollIndicator={false}>
+          showsHorizontalScrollIndicator={false}
+          style={styles.genreList}>
           {map(genreList, (genre) => (
             <Text
               key={genre.id}
               style={[
                 styles.genre,
-                {color: genre.id !== genreSelected ? '#8697a5' : '#fff'},
+                { color: genre.id !== genreSelected ? '#8697a5' : '#fff' },
               ]}
               onPress={() => onChangeGenre(genre.id)}>
               {genre.name}

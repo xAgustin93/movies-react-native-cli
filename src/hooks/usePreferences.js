@@ -1,4 +1,4 @@
-import {useContext} from 'react';
-import PreferencesContext from '../context/PreferencesContext';
+import { useContext } from 'react';
+import PreferenceContext from '../context/PreferencesContext';
 
-export default () => useContext(PreferencesContext);
+export default () => useContext(PreferenceContext);

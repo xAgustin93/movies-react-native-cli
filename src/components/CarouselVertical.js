@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,17 +6,17 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Text, Title} from 'react-native-paper';
+import { Text, Title } from 'react-native-paper';
 import Carousel from 'react-native-snap-carousel';
-import {map, size} from 'lodash';
-import {BASE_PATH_IMG} from '../utils/constants';
-import {getGenreMovieApi} from '../api/movies';
+import { map, size } from 'lodash';
+import { BASE_PATH_IMG } from '../utils/constants';
+import { getGenreMovieApi } from '../api/movies';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const ITEM_WIDTH = Math.round(width * 0.7);
 
 export default function CarouselVertical(props) {
-  const {data, navigation} = props;
+  const { data, navigation } = props;
 
   return (
     <Carousel
@@ -30,8 +30,8 @@ export default function CarouselVertical(props) {
 }
 
 function RenderItem(props) {
-  const {navigation} = props;
-  const {id, title, poster_path, genre_ids} = props.data.item;
+  const { data, navigation } = props;
+  const { id, title, poster_path, genre_ids } = data.item;
   const [genres, setGenres] = useState(null);
   const imageUrl = `${BASE_PATH_IMG}/w500${poster_path}`;
 
@@ -42,18 +42,18 @@ function RenderItem(props) {
   }, []);
 
   const onNavigation = () => {
-    navigation.navigate('movie', {id});
+    navigation.navigate('movie', { id });
   };
 
   return (
     <TouchableWithoutFeedback onPress={onNavigation}>
       <View style={styles.card}>
-        <Image style={styles.image} source={{uri: imageUrl}} />
+        <Image style={styles.image} source={{ uri: imageUrl }} />
         <Title style={styles.title}>{title}</Title>
         <View style={styles.genres}>
           {genres &&
             map(genres, (genre, index) => (
-              <Text key={genre} style={styles.genre}>
+              <Text key={index} style={styles.genre}>
                 {genre}
                 {index !== size(genres) - 1 && ', '}
               </Text>
@@ -89,6 +89,6 @@ const styles = StyleSheet.create({
   },
   genre: {
     fontSize: 12,
-    color: '#8697a5',
+    color: '#8997a5',
   },
 });

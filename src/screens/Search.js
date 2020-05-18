@@ -1,23 +1,24 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
   View,
+  ScrollView,
   SafeAreaView,
   Image,
   TouchableWithoutFeedback,
   Dimensions,
+  Platform,
 } from 'react-native';
-import {Searchbar} from 'react-native-paper';
-import {map, size} from 'lodash';
-import {searchMoviesApi} from '../api/movies';
-import {ScrollView} from 'react-native-gesture-handler';
-import {BASE_PATH_IMG} from '../utils/constants';
+import { Searchbar } from 'react-native-paper';
+import { size, map } from 'lodash';
+import { searchMoviesApi } from '../api/movies';
+import { BASE_PATH_IMG } from '../utils/constants';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default function Search(props) {
-  const {navigation} = props;
+  const { navigation } = props;
   const [movies, setMovies] = useState(null);
   const [search, setSearch] = useState('');
 
@@ -33,12 +34,10 @@ export default function Search(props) {
     <SafeAreaView>
       <Searchbar
         placeholder="Busca tu película"
-        icon="menu"
-        iconColor="transparent"
-        clearIcon="access-point"
+        iconColor={Platform.OS === 'ios' && 'transparent'}
+        icon="arrow-left"
         style={styles.input}
         onChangeText={(e) => setSearch(e)}
-        autoFocus={true}
       />
       <ScrollView>
         <View style={styles.container}>
@@ -52,11 +51,11 @@ export default function Search(props) {
 }
 
 function Movie(props) {
-  const {movie, navigation} = props;
-  const {id, poster_path, title} = movie;
+  const { movie, navigation } = props;
+  const { id, poster_path, title } = movie;
 
   const goMovie = () => {
-    navigation.navigate('movie', {id});
+    navigation.navigate('movie', { id });
   };
 
   return (
@@ -64,8 +63,8 @@ function Movie(props) {
       <View style={styles.movie}>
         {poster_path ? (
           <Image
-            source={{uri: `${BASE_PATH_IMG}/w500${poster_path}`}}
             style={styles.image}
+            source={{ uri: `${BASE_PATH_IMG}/w500${poster_path}` }}
           />
         ) : (
           <Text>{title}</Text>

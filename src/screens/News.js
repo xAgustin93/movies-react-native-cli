@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,32 +7,32 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Button, Text} from 'react-native-paper';
-import {map} from 'lodash';
-import {getNewsMoviesApi} from '../api/movies';
-import {BASE_PATH_IMG} from '../utils/constants';
+import { Button, Text } from 'react-native-paper';
+import { map } from 'lodash';
+import { getNewsMoviesApi } from '../api/movies';
+import { BASE_PATH_IMG } from '../utils/constants';
 import usePreferences from '../hooks/usePreferences';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default function News(props) {
-  const {navigation} = props;
+  const { navigation } = props;
   const [movies, setMovies] = useState(null);
   const [page, setPage] = useState(1);
-  const [showBtnMore, setshowBtnMore] = useState(true);
-  const {theme} = usePreferences();
+  const [showBtnMore, setShowBtnMore] = useState(true);
+  const { theme } = usePreferences();
 
   useEffect(() => {
     getNewsMoviesApi(page).then((response) => {
-      const totlaPages = response.total_pages;
-      if (page < totlaPages) {
+      const totalPages = response.total_pages;
+      if (page < totalPages) {
         if (!movies) {
           setMovies(response.results);
         } else {
           setMovies([...movies, ...response.results]);
         }
       } else {
-        setshowBtnMore(false);
+        setShowBtnMore(false);
       }
     });
   }, [page]);
@@ -49,7 +49,7 @@ export default function News(props) {
           mode="contained"
           contentStyle={styles.loadMoreContainer}
           style={styles.loadMore}
-          labelStyle={{color: theme === 'dark' ? '#fff' : '#000'}}
+          labelStyle={{ color: theme === 'dark' ? '#fff' : '#000' }}
           onPress={() => setPage(page + 1)}>
           Cargar mas...
         </Button>
@@ -59,11 +59,11 @@ export default function News(props) {
 }
 
 function Movie(props) {
-  const {movie, navigation} = props;
-  const {id, poster_path, title} = movie;
+  const { movie, navigation } = props;
+  const { id, title, poster_path } = movie;
 
   const goMovie = () => {
-    navigation.navigate('movie', {id});
+    navigation.navigate('movie', { id });
   };
 
   return (
@@ -71,8 +71,8 @@ function Movie(props) {
       <View style={styles.movie}>
         {poster_path ? (
           <Image
-            source={{uri: `${BASE_PATH_IMG}/w500${poster_path}`}}
             style={styles.image}
+            source={{ uri: `${BASE_PATH_IMG}/w500${poster_path}` }}
           />
         ) : (
           <Text>{title}</Text>

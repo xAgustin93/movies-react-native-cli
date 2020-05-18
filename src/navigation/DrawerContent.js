@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
-import {DrawerContentScrollView} from '@react-navigation/drawer';
-import {Drawer, Switch, TouchableRipple, Text} from 'react-native-paper';
-import usePreferences from '../hooks/usePreferences';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { Drawer, Switch, TouchableRipple, Text } from 'react-native-paper';
+import usePreference from '../hooks/usePreferences';
 
 export default function DrawerContent(props) {
-  const {navigation} = props;
+  const { navigation } = props;
   const [active, setActive] = useState('home');
-  const {theme, toggleTheme} = usePreferences();
+  const { theme, toggleTheme } = usePreference();
 
   const onChangeScreen = (screen) => {
     setActive(screen);
@@ -19,16 +19,16 @@ export default function DrawerContent(props) {
       <Drawer.Section>
         <Drawer.Item
           label="Inicio"
-          active={active === 'homee'}
-          onPress={() => onChangeScreen('homee')}
+          active={active === 'home'}
+          onPress={() => onChangeScreen('home')}
         />
         <Drawer.Item
-          label="Populares"
+          label="Películas populares"
           active={active === 'popular'}
           onPress={() => onChangeScreen('popular')}
         />
         <Drawer.Item
-          label="Nuevas"
+          label="Nuevas películas"
           active={active === 'news'}
           onPress={() => onChangeScreen('news')}
         />
@@ -37,10 +37,7 @@ export default function DrawerContent(props) {
         <TouchableRipple>
           <View style={styles.preference}>
             <Text>Tema Oscuro</Text>
-            <Switch
-              value={theme === 'dark' ? true : false}
-              onValueChange={toggleTheme}
-            />
+            <Switch value={theme === 'dark'} onValueChange={toggleTheme} />
           </View>
         </TouchableRipple>
       </Drawer.Section>

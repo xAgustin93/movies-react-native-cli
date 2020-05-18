@@ -1,23 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, ScrollView, Image} from 'react-native';
-import {Text, Title, IconButton} from 'react-native-paper';
-import {map} from 'lodash';
-import {Rating} from 'react-native-ratings';
-import {getMovieById} from '../api/movies';
-import {BASE_PATH_IMG} from '../utils/constants';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, ScrollView, Image } from 'react-native';
+import { Text, Title, IconButton } from 'react-native-paper';
+import { map } from 'lodash';
+import { Rating } from 'react-native-ratings';
 import ModalVideo from '../components/ModalVideo';
+import { getMovieByIdApi } from '../api/movies';
+import { BASE_PATH_IMG } from '../utils/constants';
 import usePreferences from '../hooks/usePreferences';
 import starDark from '../assets/png/starDark.png';
 import starLight from '../assets/png/starLight.png';
 
 export default function Movie(props) {
-  const {route} = props;
-  const {id} = route.params;
+  const { route } = props;
+  const { id } = route.params;
   const [movie, setMovie] = useState(null);
   const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
-    getMovieById(id).then((response) => {
+    getMovieByIdApi(id).then((response) => {
       setMovie(response);
     });
   }, []);
@@ -35,7 +35,7 @@ export default function Movie(props) {
           voteAverage={movie.vote_average}
         />
         <Text style={styles.overview}>{movie.overview}</Text>
-        <Text style={styles.overview}>
+        <Text style={[styles.overview, { marginBottom: 30 }]}>
           Fecha de lanzamiento: {movie.release_date}
         </Text>
       </ScrollView>
@@ -45,19 +45,20 @@ export default function Movie(props) {
 }
 
 function MovieImage(props) {
-  const {posterPath} = props;
+  const { posterPath } = props;
+
   return (
     <View style={styles.viewPoster}>
       <Image
         style={styles.poster}
-        source={{uri: `${BASE_PATH_IMG}/w500${posterPath}`}}
+        source={{ uri: `${BASE_PATH_IMG}/w500${posterPath}` }}
       />
     </View>
   );
 }
 
 function MovieTrailer(props) {
-  const {setShowVideo} = props;
+  const { setShowVideo } = props;
 
   return (
     <View style={styles.viewPlay}>
@@ -73,15 +74,15 @@ function MovieTrailer(props) {
 }
 
 function MovieTitle(props) {
-  const {movie} = props;
+  const { movie } = props;
 
   return (
     <View style={styles.viewInfo}>
       <Title>{movie.title}</Title>
       <View style={styles.viewGenres}>
-        {map(movie.genres, (genres) => (
-          <Text key={genres.id} style={styles.genre}>
-            {genres.name}
+        {map(movie.genres, (genre) => (
+          <Text key={genre.id} style={styles.genre}>
+            {genre.name}
           </Text>
         ))}
       </View>
@@ -90,9 +91,9 @@ function MovieTitle(props) {
 }
 
 function MovieRating(props) {
-  const {voteCount, voteAverage} = props;
+  const { voteCount, voteAverage } = props;
   const media = voteAverage / 2;
-  const {theme} = usePreferences();
+  const { theme } = usePreferences();
 
   return (
     <View style={styles.viewRating}>
@@ -103,18 +104,12 @@ function MovieRating(props) {
         ratingBackgroundColor={theme === 'dark' ? '#192734' : '#f0f0f0'}
         startingValue={media}
         imageSize={20}
-        style={{marginRight: 15}}
+        style={{ marginRight: 15 }}
       />
-      <Text style={{fontSize: 16, marginRight: 5}}>{media}</Text>
-      <Text style={{fontSize: 12, color: '#8697a5'}}>({voteCount} votos)</Text>
+      <Text style={{ fontSize: 16, marginRight: 5 }}>{media}</Text>
+      <Text style={{ fontSize: 12, color: '#8697a5' }}>{voteCount} votos</Text>
     </View>
   );
-}
-
-function MovieOverview(props) {
-  const {overview} = props;
-
-  return <Text>overview</Text>;
 }
 
 const styles = StyleSheet.create({
@@ -125,7 +120,7 @@ const styles = StyleSheet.create({
       height: 10,
     },
     shadowOpacity: 1,
-    shadowRadius: 10,
+    textShadowRadius: 10,
   },
   poster: {
     width: '100%',
@@ -152,7 +147,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   genre: {
-    marginRight: 10,
+    marginRight: 20,
     color: '#8697a5',
   },
   viewRating: {
